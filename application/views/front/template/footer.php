@@ -178,43 +178,47 @@ if(isset($sess['id_user'])) {
 
 <script type="text/javascript" src="<?php echo base_url(); ?>layout/hotmagz/js/script.js"></script>
 
+<script type="text/javascript">
 
+    var baseurl = "<?php echo base_url(); ?>";
+
+</script>
 
 <?php if(isset($bounceArticle)): ?>
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    var timeleft = 15;
+        var timeleft = 15;
 
-    var randpageid = Math.random().toString().replace(/\./g,'');
+        var randpageid = Math.random().toString().replace(/\./g,'');
 
-    var downloadTimer = setInterval(function(){
+        var downloadTimer = setInterval(function(){
 
-        10 - --timeleft
+            10 - --timeleft
 
-        if(timeleft <= 0) {
+            if(timeleft <= 0) {
 
-            clearInterval(downloadTimer);
+                clearInterval(downloadTimer);
 
-            $.ajax({
+                $.ajax({
 
-                url : "<?php echo base_url().index_with(); ?>article/impressview",
+                    url : "<?php echo base_url().index_with(); ?>article/impressview",
 
-                method : "POST",
+                    method : "POST",
 
-                data : {client: "<?php echo $ipaddress; ?>",articleid: <?php echo $bounceArticle ?>,action: "view"},
+                    data : {client: "<?php echo $ipaddress; ?>",articleid: <?php echo $bounceArticle ?>,action: "view"},
 
-                async : false,
+                    async : false,
 
-                dataType : 'json',
+                    dataType : 'json',
 
-                success: function(data){
+                    success: function(data){
 
-                    console.log(data);
+                        console.log(data);
 
-                }
+                    }
 
-            });
+                });
 
 
 
@@ -258,27 +262,71 @@ if(isset($sess['id_user'])) {
 
 <script type="text/javascript">
 
-
-
-  window.fbAsyncInit = function() {
-
-    FB.init({
-
-      appId            : '570962756574024',
-
-      autoLogAppEvents : true,
-
-      xfbml            : true,
-
-      version          : 'v2.12'
-
+    jQuery(document).ready(function($){
+        $('#titlePaste').text('Click or tap here and paste or upload your');
     });
 
-  };
+    document.addEventListener('paste', function (e) {
+        if (e.clipboardData) {
+            var items = e.clipboardData.items;
+            if (items) {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+
+                        var blob = items[i].getAsFile();
+                        var URLObj = window.URL || window.webkitURL;
+                        var source = URLObj.createObjectURL(blob);
+
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+
+                            $.ajax({
+                                url : "<?php echo base_url().index_with(); ?>paste",
+                                method : "POST",
+                                data : {action: 'paste',base64: e.target.result},
+                                async : false,
+                                dataType : 'json',
+                                success: function(data){
+                                    var imageUrl = 'google.com';
+                                    $('#titlePaste').text('Your Image Url is '+imageUrl+' already copy to your clipboard');
+                                }
+
+                            });                            
+
+                            $('#pasteImage')
+                            .show()
+                            .attr('src', e.target.result);
+
+                        };
+                        reader.readAsDataURL(blob);
+                    }
+                }
+            }
+        }
+    });
 
 
 
-  (function(d, s, id){
+    window.fbAsyncInit = function() {
+
+        FB.init({
+
+          appId            : '570962756574024',
+
+          autoLogAppEvents : true,
+
+          xfbml            : true,
+
+          version          : 'v2.12'
+
+      });
+
+    };
+
+
+
+    (function(d, s, id){
 
      var js, fjs = d.getElementsByTagName(s)[0];
 
@@ -290,7 +338,7 @@ if(isset($sess['id_user'])) {
 
      fjs.parentNode.insertBefore(js, fjs);
 
-   }(document, 'script', 'facebook-jssdk'));
+ }(document, 'script', 'facebook-jssdk'));
 
 
 
@@ -306,7 +354,7 @@ if(isset($sess['id_user'])) {
 
         });
 
-    <?php } ?>
+        <?php } ?>
 
 
 
@@ -418,7 +466,7 @@ if(isset($sess['id_user'])) {
 
     $.fn.pressEnter = function(fn) {  
 
-  
+
 
         return this.each(function() {  
 
@@ -432,13 +480,13 @@ if(isset($sess['id_user'])) {
 
                   $(this).trigger("enterPress");
 
-                }
+              }
 
-            })
+          })
 
         });  
 
-     }; 
+    }; 
 
 
 
@@ -504,15 +552,15 @@ if(isset($sess['id_user'])) {
 
         <?php if(isset($errors)):?>
 
-            <?php if(!empty($errors) || $errors != ''):?>
+        <?php if(!empty($errors) || $errors != ''):?>
 
-                $('#myModal').modal('show', function () {
+        $('#myModal').modal('show', function () {
 
-                    $(".modal-backdrop.in").hide();
+            $(".modal-backdrop.in").hide();
 
-                });
+        });
 
-            <?php endif;?>
+        <?php endif;?>
 
         <?php endif;?>  
 
@@ -570,13 +618,13 @@ if(isset($sess['id_user'])) {
 
     });
 
-  </script>
+</script>
 
 
 
 <script>
 
-(adsbygoogle = window.adsbygoogle || []).push({});
+    (adsbygoogle = window.adsbygoogle || []).push({});
 
 </script>
 

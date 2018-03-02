@@ -1900,6 +1900,8 @@ class Front extends CI_Controller {
 
 	public function shorturl()
 	{
+		$showMenu = array();
+
 		if($this->agent->is_mobile()) {
 			$mobileUser = true;
 		} else {
@@ -2114,6 +2116,123 @@ class Front extends CI_Controller {
 		} else {
 			return array('error' => 0,'shotrurl' => $longData[0]->url_short);
 		}
+	}
+
+	public function screnShootCapture()
+	{
+
+		$showMenu = array();
+		if($this->agent->is_mobile()) {
+			$mobileUser = true;
+		} else {
+			$mobileUser = false;
+		}
+
+		$menu = $this->Menu_Model->menuByStatus(1);
+
+		$submenu = $this->Menu_Model->subMenuByStatus(1);
+
+		$menuArticle = $this->Menu_Model->menuFromArticle();
+		$subMenuArticle = $this->Menu_Model->subMenuFromArticle();
+
+		foreach ($menu as $key => $value) {
+
+			// Article Menu
+			foreach ($menuArticle as $art => $mArt) {
+
+				if($value->id_menu == $mArt->id_category) {
+
+					$showMenu[$value->menu_name]['url'] = $value->menu_url;
+
+
+					foreach ($submenu as $keysub => $valuesub) {
+
+						if($value->id_menu == $valuesub->id_menu) {
+
+							// Article Sub Menu
+							foreach ($subMenuArticle as $sart => $smArt) {
+
+								if($smArt->id_sub == $valuesub->id_sub) {
+									$showMenu[$value->menu_name][$valuesub->sub_name]['url'] = $valuesub->sub_url;
+								}
+							}
+
+						}
+
+					}
+				}
+			}
+
+		}
+
+
+		if ($this->input->post()) {
+			if($this->input->post('action') == 'paste') {
+				if(!empty($this->input->post('base64'))) {
+					$imageBase64 = $this->input->post('base64');
+
+					$removeBase = str_replace('data:image/png;base64,', '', $imageBase64);
+					$img = str_replace(' ', '+', $removeBase);
+					$data = base64_decode($img);
+
+					$file = '.uploads/'.date('YmdHis').'.png';
+					$success = file_put_contents($file, $data);
+					print $success ? $file : 'Unable to save the file.';
+				}
+			}
+		}
+
+
+
+		$articleByStatus = $this->Article_Model->articleByStatus(1);
+
+		$submenuCount = $this->Menu_Model->subMenuCount();
+		$idUser = $this->session->userdata('id_user');
+		$avatar = $this->User_Model->avatarById($idUser);
+
+		if(!empty($avatar)) {
+			if(file_exists(getcwd().$avatar[0]->avatar_path)) {
+				$ava = $avatar[0]->avatar_path;
+			} else {
+				$ava = '/layout/img/NoAvatar.jpg';
+			}
+		} else {
+			$ava = '/layout/img/NoAvatar.jpg';
+		}
+
+		$meta = array(
+			'author' => 'Screen Capture Share Powered By Limit Code Inc.',
+			'description' => 'Screen Capture Share By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+			'keywords' => 'Screen Capture Share Powered By Limit Code, screen capture, preint screen, paste, Limit Code, Limit, Code, Sebuah Media, Media, Berbagi, Tulisan, Artikel, Article, Writer, Share, Video, Photo, Image, Audio, mp4, mp3',
+			'articleAuthor' => 'Short URL Powered By Limit Code',
+			'articlePublisher' => 'Short URL Powered By Limit Code',
+			'ogType' => 'article',
+			'ogUrl' => base_url().index_with().'short',
+			'ogTitle' => 'Screen Capture Share Powered By Limit Code',
+			'ogDescription' => 'Screen Capture Share Powered By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+			'ogImage' => base_url().'/layout/img/lc-short-link.jpg',			
+			'ogImageSecureUrl' => base_url().'layout/img/lc-short-link.jpg',		
+			'ogImageAlt' => 'Screen Capture Share Powered By Limit Code'		
+		);
+
+		$data = array(
+			'menus' => $showMenu,
+			'submenu' => $submenuCount,
+			'pages' => 'paste',
+			'webtitle' => 'Screen Capture Share Powered By Limit Code',
+			'meta'=> $meta,
+			'detailtitle' => 'Screen Capture Share Powered By Limit Code',
+
+			'mobile' => $mobileUser,
+
+			'contents' => $articleByStatus,
+
+			'sessionData' => $this->session->userdata()
+		);
+
+
+
+		$this->load->view('front/template/template',$data);
 	}
 
 }

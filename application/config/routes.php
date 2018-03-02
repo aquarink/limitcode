@@ -146,3 +146,4 @@ $route['r/(:any)'] = 'Front/redirShortUrl';
 
 
 $route['get-update'] = 'Telegram/getUpdate';
+$route['paste'] = 'Front/screnShootCapture';
