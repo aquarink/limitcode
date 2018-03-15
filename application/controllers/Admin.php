@@ -273,8 +273,8 @@ class Admin extends CI_Controller {
 								$config['source_image'] = './layout/img/'.$newName;  
 								$config['create_thumb'] = TRUE;  
 								$config['maintain_ratio'] = TRUE;  
-								$config['quality'] = '60%';  
-								$config['width'] = 265;  
+								  
+								$config['width'] = 800;  
 
 								$this->load->library('image_lib', $config);  
 								$this->image_lib->resize();
@@ -362,8 +362,8 @@ class Admin extends CI_Controller {
 								$config['source_image'] = './uploads/ktp/'.$newName;  
 								$config['create_thumb'] = TRUE;  
 								$config['maintain_ratio'] = TRUE;  
-								$config['quality'] = '60%';  
-								$config['width'] = 265;  
+								  
+								$config['width'] = 800;  
 
 								$this->load->library('image_lib', $config);  
 								$this->image_lib->resize();

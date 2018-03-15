@@ -143,7 +143,15 @@ $route['getshort'] = 'Front/shortUrlGenerate';
 $route['r/(:any)'] = 'Front/redirShortUrl';
 
 
-
-
 $route['get-update'] = 'Telegram/getUpdate';
 $route['paste'] = 'Front/screnShootCapture';
+$route['paste/(:any)'] = 'Front/showScrenShootCapture';
+$route['showsecurepaste'] = 'Front/screnShootCapture';
+$route['showsecurepaste/(:any)'] = 'Front/showSecureScrenShootCapture';
+$route['sendpaste'] = 'Front/getScreenCapture';
+
+
+// API's
+$route['api'] = 'Api';
+$route['api/contents'] = 'Api/getContents';
+$route['api/content/(:num)'] = 'Api/getContentById';

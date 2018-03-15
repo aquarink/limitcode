@@ -15,7 +15,7 @@
 			</ul>
 		</div>
 
-		<div class="iso-call heading-news-box">
+		<div class="iso-call heading-news-box"> 
 			
 
 
@@ -72,14 +72,16 @@
 							   }(document, 'script', 'facebook-jssdk'));
 
 							</script>
-							<h1><span class="world">Enter URL to short <div class="fb-share-button" data-href="<?php echo base_url().index_with(); ?>short" data-layout="button_count"></span></h1>
+							<h1><span class="world">Enter URL to short <div class="fb-share-button" data-href="<?php echo base_url().index_with(); ?>paste" data-layout="button_count"></span></h1>
 						</div>
 
 						<div class="row">
 
 							<div class="col-sm-12" style="text-align: center; background-color: #dadada; height: 100px;">
 								<div style="margin-top: 40px; vertical-align: middle;display: inline-block;line-height: normal;">
-									<b id="titlePaste"></b> 	
+									<b id="titlePastes"></b> 
+
+									<b id="titlePastesAfter">Your Image Url is <input id="valLink" type="text" name="valLink"> already copy to your clipboard. </b>	
 								</div>
 							</div>
 

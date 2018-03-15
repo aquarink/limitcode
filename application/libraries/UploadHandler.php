@@ -44,8 +44,8 @@ class UploadHandler
         $this->response = array();
         $this->options = array(
             'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
-            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/uploads/'.date('Y').'/'.date('F').'/videos/',
-            'upload_url' => $this->get_full_url().'/uploads/'.date('Y').'/'.date('F').'/videos/',
+            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/uploads/videos//'.date('Y').'/'.date('F').'/',
+            'upload_url' => $this->get_full_url().'/uploads/videos/'.date('Y').'/'.date('F').'/',
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,

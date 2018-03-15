@@ -134,11 +134,11 @@ class Video extends CI_Controller {
 
 					if(empty($_FILES["thumbnailarticle"]["name"])) {
 
-						$thumb = $this->input->post('thumbnailarticleOri');
+						$thumb = $this->input->post('postFileOriName');
 
 					} else {
 
-						$thumb = $_FILES["thumbnailarticle"]["name"];
+						$thumb = $_FILES["thumbnailarticle"]["name"]; 
 
 					}
 
@@ -160,7 +160,7 @@ class Video extends CI_Controller {
 
 						$hidName = $this->input->post('filename');
 
-						$nameSave = '/uploads/'.date('Y').'/'.date('F').'/videos/'.$hidName;
+						$nameSave = '/uploadsvideos/'.date('Y').'/'.date('F').'/'.$hidName;
 
 						$hidOri = $this->input->post('fileoriname');
 
@@ -206,13 +206,13 @@ class Video extends CI_Controller {
 
 
 
-							$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/';
+							$config['upload_path'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/';
 
 							$config['allowed_types'] = 'gif|jpg|png|jpeg';					
 
 
 
-							$newNameAfterResize = '/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$nameRand.'_thumb.'.$expType[1];
+							$newNameAfterResize = '/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$nameRand.'_thumb.'.$expType[1];
 
 
 
@@ -224,11 +224,11 @@ class Video extends CI_Controller {
 
 
 
-							if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'))
+							if (!is_dir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'))
 
 						    {
 
-						        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/', 0777, true);
+						        mkdir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/', 0777, true);
 
 						    }
 
@@ -260,15 +260,15 @@ class Video extends CI_Controller {
 
 								$config['image_library'] = 'gd2';  
 
-								$config['source_image'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName;  
+								$config['source_image'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName;  
 
 								$config['create_thumb'] = TRUE;  
 
 								$config['maintain_ratio'] = TRUE;  
 
-								$config['quality'] = '60%';  
+								  
 
-								$config['width'] = 265;  
+								$config['width'] = 800;  
 
 
 
@@ -278,7 +278,7 @@ class Video extends CI_Controller {
 
 
 
-								if(unlink('./uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName)) {
+								if(unlink('./uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName)) {
 
 
 
@@ -1112,13 +1112,13 @@ class Video extends CI_Controller {
 
 
 
-								$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/';
+								$config['upload_path'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/';
 
 								$config['allowed_types'] = 'gif|jpg|png|jpeg';					
 
 
 
-								$newNameAfterResize = '/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$nameRand.'_thumb.'.$expType[1];
+								$newNameAfterResize = '/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$nameRand.'_thumb.'.$expType[1];
 
 
 
@@ -1152,13 +1152,13 @@ class Video extends CI_Controller {
 
 									$config['image_library'] = 'gd2';  
 
-									$config['source_image'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName;  
+									$config['source_image'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName;  
 
 									$config['create_thumb'] = TRUE;  
 
 									$config['maintain_ratio'] = TRUE;  
 
-									$config['quality'] = '60%';  
+									  
 
 									$config['width'] = 265;  
 
@@ -1170,7 +1170,7 @@ class Video extends CI_Controller {
 
 
 
-									if(unlink('./uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName)) {
+									if(unlink('./uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName)) {
 
 
 
@@ -1269,16 +1269,20 @@ class Video extends CI_Controller {
 						$avatar = $this->User_Model->avatarById($idUser);
 
 
-
-						if(file_exists(getcwd().$avatar[0]->avatar_path)) {
-
-							$ava = $avatar[0]->avatar_path;
-
+						if(empty($avatar)) {
+							$ava = '/layout/img/NoAvatar.jpg';
 						} else {
+							if(file_exists(path_with().$avatar[0]->avatar_path)) { 
 
-							$ava = getcwd().'/layout/img/NoAvatar.jpg';
+								$ava = $avatar[0]->avatar_path;
 
+							} else {
+
+								$ava = '/layout/img/NoAvatar.jpg';
+
+							}
 						}
+						
 
 
 
@@ -1386,7 +1390,7 @@ class Video extends CI_Controller {
 
 
 
-				$path = "/uploads/".date('Y')."/".date('F')."/videos/".$video;
+				$path = "uploads/videos/".date('Y')."/".date('F')."/".$video;
 
 
 

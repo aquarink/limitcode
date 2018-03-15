@@ -126,7 +126,7 @@ class Article extends CI_Controller {
 
 						if($expType[1] == 'gif' || $expType[1] == 'jpg' || $expType[1] == 'png' || $expType[1] == 'jpeg') {
 							//config
-							$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/';
+							$config['upload_path'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/';
 							$config['allowed_types'] = 'gif|jpg|png|jpeg';
 
 							$idUser = $this->session->userdata('id_user');
@@ -145,15 +145,15 @@ class Article extends CI_Controller {
 					
 							$newName = $nameRand.'.'.$expType[1];
 
-							$newNameAfterResize = '/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$nameRand.'_thumb.'.$expType[1];
+							$newNameAfterResize = '/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$nameRand.'_thumb.'.$expType[1];
 
 							$config['file_name'] = $newName;
 
 							$path = path_with();
 
-							if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'))
+							if (!is_dir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'))
 						    {
-						        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/', 0777, true);
+						        mkdir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/', 0777, true);
 						    }
 
 							$this->load->library('upload', $config);
@@ -169,16 +169,15 @@ class Article extends CI_Controller {
 								$data = array('upload_data' => $this->upload->data());
 
 								$config['image_library'] = 'gd2';  
-								$config['source_image'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName;  
+								$config['source_image'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName;  
 								$config['create_thumb'] = TRUE;  
 								$config['maintain_ratio'] = TRUE;  
-								// $config['quality'] = '60%';  
-								$config['width'] = 750;  
+								$config['width'] = 800;  
 
 								$this->load->library('image_lib', $config);  
 								$this->image_lib->resize();
 
-								if(unlink('./uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName)) {
+								if(unlink('./uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName)) {
 
 									$insertNewArticle = $this->Article_Model->insertNewArticle($idUser, $parentMenu, $childMenu, '1', $title, $article, '', $newNameAfterResize, $content_link, date('Y-m-d H:i:s'), 0, 0);
 
@@ -284,6 +283,7 @@ class Article extends CI_Controller {
 			$idUser = $this->session->userdata('id_user');
 
 			//
+			// print_r($this->input->post());
 
 			if ($this->input->post()) {
 				if($this->input->post('submit') == 'updatearticle') {
@@ -312,6 +312,7 @@ class Article extends CI_Controller {
 
 							$link = strip_tags($newTitle5).'-'.date('Y-m-d-H-i-s');
 							$cleanChar = str_replace(array('','!',' ',',','.','~','/',':','*','?','"','<','>','|',"'"),'-',$title);
+							$content_link = strip_tags($cleanChar).'-'.date('Y-m-d-H-i-s');
 							$nameRand = $content_link.'_'.rand(1,99999);	
 
 							if(empty($_FILES["thumbnailarticle"]["name"])) {
@@ -340,18 +341,18 @@ class Article extends CI_Controller {
 									//config
 									$newName = $nameRand.'.'.$expType[1];
 									
-									$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/';
+									$config['upload_path'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/';
 									$config['allowed_types'] = 'gif|jpg|png|jpeg';					
 
-									$newNameAfterResize = '/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$nameRand.'_thumb.'.$expType[1];
+									$newNameAfterResize = '/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$nameRand.'_thumb.'.$expType[1];
 
 									$config['file_name'] = $newName;
 
 									$path = path_with();
 
-									if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'))
+									if (!is_dir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'))
 								    {
-								        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/', 0777, true);
+								        mkdir($path.'/uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/', 0777, true);
 								    }
 
 									$this->load->library('upload', $config);
@@ -367,16 +368,15 @@ class Article extends CI_Controller {
 										$data = array('upload_data' => $this->upload->data());
 
 										$config['image_library'] = 'gd2';  
-										$config['source_image'] = './uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName;  
+										$config['source_image'] = './uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName;  
 										$config['create_thumb'] = TRUE;  
-										$config['maintain_ratio'] = TRUE;  
-										// $config['quality'] = '60%';  
-										$config['width'] = 750;  
+										$config['maintain_ratio'] = TRUE; 
+										$config['width'] = 800;  
 
 										$this->load->library('image_lib', $config);  
 										$this->image_lib->resize();
 
-										if(unlink('./uploads/'.date('Y').'/'.date('F').'/thumbnails/article_thumbnail/'.$newName)) {
+										if(unlink('./uploads/thumbnails/article_thumbnail/'.date('Y').'/'.date('F').'/'.$newName)) {
 
 											$updateArticle = $this->Article_Model->updateArticle($id, '1', $parentMenu, $childMenu, '1', $title, $article, '', $newNameAfterResize, $content_link, date('Y-m-d H:i:s'), 1, 0);
 
@@ -427,10 +427,14 @@ class Article extends CI_Controller {
 					$idUser = $this->session->userdata('id_user');
 					$avatar = $this->User_Model->avatarById($idUser);
 
-					if(file_exists(path_with().$avatar[0]->avatar_path)) {
-						$ava = $avatar[0]->avatar_path;
+					if(!empty($avatar)) {
+						if(file_exists(path_with().$avatar[0]->avatar_path)) {
+							$ava = $avatar[0]->avatar_path;
+						} else {
+							$ava = '/layout/img/NoAvatar.jpg';
+						}
 					} else {
-						$ava = path_with().'/layout/img/NoAvatar.jpg';
+						$ava = '/layout/img/NoAvatar.jpg';
 					}
 
 					$data = array(
@@ -642,18 +646,18 @@ class Article extends CI_Controller {
 				//config
 				$newName = date('YmdHis').'_limitcode_article_image';
 				
-				$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/article_images/';
+				$config['upload_path'] = './uploads/article_images/'.date('Y').'/'.date('F').'/';
 				$config['allowed_types'] = 'gif|jpg|png|jpeg';					
 
-				$newNameAfterResize = '/uploads/'.date('Y').'/'.date('F').'/article_images/'.$newName.'_thumb.'.$expType[1];
+				$newNameAfterResize = '/uploads/article_images/'.date('Y').'/'.date('F').'/'.$newName.'_thumb.'.$expType[1];
 
 				$config['file_name'] = $newName.'.'.$expType[1];
 
 				$path = path_with();
 
-				if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/article_images/'))
+				if (!is_dir($path.'/uploads/article_images/'.date('Y').'/'.date('F').'/'))
 			    {
-			        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/article_images/', 0777, true);
+			        mkdir($path.'/uploads/article_images/'.date('Y').'/'.date('F').'/', 0777, true);
 			    }
 
 				$this->load->library('upload', $config);
@@ -669,16 +673,16 @@ class Article extends CI_Controller {
 					$data = array('upload_data' => $this->upload->data());
 
 					$config['image_library'] = 'gd2';  
-					$config['source_image'] = './uploads/'.date('Y').'/'.date('F').'/article_images/'.$newName.'.'.$expType[1];  
+					$config['source_image'] = './uploads/article_images/'.date('Y').'/'.date('F').'/'.$newName.'.'.$expType[1];  
 					$config['create_thumb'] = TRUE;  
 					$config['maintain_ratio'] = TRUE;  
 					// $config['quality'] = '60%';  
-					$config['width'] = 750;  
+					$config['width'] = 800;  
 
 					$this->load->library('image_lib', $config);  
 					$this->image_lib->resize();
 
-					if(unlink('./uploads/'.date('Y').'/'.date('F').'/article_images/'.$newName.'.'.$expType[1])) {
+					if(unlink('./uploads/article_images/'.date('Y').'/'.date('F').'/'.$newName.'.'.$expType[1])) {
 
 						$data = getimagesize(path_with().$newNameAfterResize);
 						$data = array(
@@ -719,9 +723,9 @@ class Article extends CI_Controller {
 
 			$path = path_with();
 
-			if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/article_video/'))
+			if (!is_dir($path.'/uploads/article_video/'.date('Y').'/'.date('F').'/'))
 		    {
-		        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/article_video/', 0777, true);
+		        mkdir($path.'/uploads/article_video/'.date('Y').'/'.date('F').'/', 0777, true);
 		    }
 
 			if(move_uploaded_file($tmp_name, 'uploads/article_video/'.$newName)) {

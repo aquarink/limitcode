@@ -24,8 +24,6 @@
 
   <meta name="robots" content="index,follow" />
 
-  <meta property="og:type" content="article" />
-
 
 
   <?php if(isset($meta))  { ?>
@@ -34,7 +32,7 @@
 
   <meta name="description" content="<?php echo strip_tags($meta['description']); ?> <?php echo $ml; ?>" />
 
-  <meta name="keywords" content="<?php if(isset($webtitle)) { echo $webtitle; } ?><?php echo $meta['keywords']; ?>,<?php echo $ml; ?>" />
+  <meta name="keywords" content="<?php if(isset($webtitle)) { echo $webtitle; } ?> <?php echo $meta['keywords']; ?>,<?php echo $ml; ?>" />
 
 
 
@@ -58,7 +56,7 @@
 
   <meta property="og:image:secure_url" content="<?php echo $meta['ogImageSecureUrl']; ?>" />
 
-  <meta property="og:image:type" content="image/jpeg" />
+  <meta property="og:image:type" content="<?php if(!empty($meta['ogImageType'])) { echo $meta['ogImageType']; } else { echo 'image/jpeg'; } ?>" />
 
   <meta property="og:image:alt" content="<?php echo $meta['ogImageAlt']; ?>" />
 
@@ -99,6 +97,9 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>layout/hotmagz/css/style.css" media="screen">
 
   <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>layout/hotmagz/css/font-awesome.css" media="screen">
+
+
+  <script>
 
 <?php if(isset($imgResponsive)) { ?>
     var list = document.getElementsByTagName("img");
@@ -270,6 +271,7 @@
                                         <li><a href="<?php echo base_url().index_with().'signup';?>">Sign up</a></li>
                                         <?php } ?>
                                         <li><a href="<?php echo base_url().index_with().'short';?>">Short URl</a></li>
+                                        <li><a href="<?php echo base_url().index_with().'paste';?>">Screenshot Online</a></li>
                                     </ul>
 
                                 </li>

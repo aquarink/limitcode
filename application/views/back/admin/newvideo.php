@@ -112,7 +112,7 @@
         dataType: 'json',
         autoUpload: false,
     	// acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        acceptFileTypes: /(\.|\/)(ogg|mp4|mov|flv)$/i,
+        acceptFileTypes: /(\.|\/)(ogg|mp4)$/i,
         maxFileSize: 4000000000,
         // Enable image resizing, except for Android and Opera,
         // which actually support image resizing, but fail to
@@ -231,7 +231,7 @@
 			<i class="icon icon-video"></i>
 			<span>Add Video</span>
 			<!-- The file input field used as target for the file upload widget -->
-			<input id="fileupload" type="file" name="files[]">
+			<input id="fileupload" type="file" name="files[]" accept="video/mp4">
 		</span>
 		<br>
 		<br>

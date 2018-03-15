@@ -2018,6 +2018,10 @@ class Front extends CI_Controller {
 			$shortDataByCode = $this->User_Model->shortUrlByCode($code);
 			if(!empty($shortDataByCode)) {
 
+				$baseForSubs = strlen(base_url().'uploads/screencapture');
+
+				$getString = substr($shortDataByCode[0]->url_long, 34, 13);
+
 				// GET IP
 				$ipaddress = '';
 				if (isset($_SERVER['HTTP_CLIENT_IP'])) {
@@ -2053,17 +2057,63 @@ class Front extends CI_Controller {
 					$clientType = 'desktop';
 				}
 
+
+				//PARSING
+				if($getString == 'screencapture') {
+					$errorRedir = 'paste';
+					$trueRedir = '';
+
+					$baseForSubs = strlen(base_url().'uploads/screencapture');
+
+					$getString = substr($shortDataByCode[0]->url_long, 34, 13);
+
+					
+					$meta = array(
+						'author' => 'Screen Capture Share Powered By Limit Code Inc.',
+						'description' => 'Screen Capture Share By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+						'keywords' => 'Screen Capture Share Powered By Limit Code, screen capture, preint screen, paste, Limit Code, Limit, Code, Sebuah Media, Media, Berbagi, Tulisan, Artikel, Article, Writer, Share, Video, Photo, Image, Audio, mp4, mp3',
+						'articleAuthor' => 'Short URL Powered By Limit Code',
+						'articlePublisher' => 'Short URL Powered By Limit Code',
+						'ogType' => 'image',
+						'ogUrl' => base_url().index_with().'paste',
+						'ogTitle' => 'Screen Capture Share Powered By Limit Code',
+						'ogDescription' => 'Screen Capture Share Powered By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+						'ogImage' => base_url().index_with().'showsecurepaste/'.$code,			
+						'ogImageSecureUrl' => base_url().index_with().'showsecurepaste/'.$code,	
+						'ogImageType' => "image/png",
+						'ogImageAlt' => 'Screen Capture Share Powered By Limit Code'		
+					);
+
+					$data = array(
+						'webtitle' => 'Screen Capture Share Powered By Limit Code',
+						'meta'=> $meta,
+						'detailtitle' => 'Screen Capture Share Powered By Limit Code',
+
+						'contents' => base_url().index_with().'showsecurepaste/'.$code,
+
+						'sessionData' => $this->session->userdata()
+					);
+
+					$this->load->view('front/showpaste',$data);
+
+				} else {
+					$errorRedir = 'short';
+					$trueRedir = $shortDataByCode[0]->url_long;
+				}
+
 				$insertAnalytic = $this->User_Model->insertAnalyticShortUrl($shortDataByCode[0]->id_short, $shortDataByCode[0]->url_code, $ipaddress, $clientBrowser, $clientType);
 
 				if($insertAnalytic > 0) {
-					header("Location: ".$shortDataByCode[0]->url_long);
+					if(!empty($trueRedir) || $trueRedir != '') {
+						header("Location: ".$trueRedir);
+					}					
 				} else {
-					redirect('short');
+					redirect($errorRedir);
 				}
 			}
 
 		} else {
-			echo $this->uri->segment(1);
+			redirect('home?redirShortUrl');
 		}
 	}
 
@@ -2105,7 +2155,7 @@ class Front extends CI_Controller {
 						} else {
 							$shortJson = array('error' => 1);
 						}
-
+ 
 						return $shortJson;
 					}
 				} while (!empty($shortDataByCode));
@@ -2120,6 +2170,10 @@ class Front extends CI_Controller {
 
 	public function screnShootCapture()
 	{
+
+		if($this->uri->segment(1) == 'showsecurepaste') {
+			redirect('paste');
+		}
 
 		$showMenu = array();
 		if($this->agent->is_mobile()) {
@@ -2166,24 +2220,6 @@ class Front extends CI_Controller {
 		}
 
 
-		if ($this->input->post()) {
-			if($this->input->post('action') == 'paste') {
-				if(!empty($this->input->post('base64'))) {
-					$imageBase64 = $this->input->post('base64');
-
-					$removeBase = str_replace('data:image/png;base64,', '', $imageBase64);
-					$img = str_replace(' ', '+', $removeBase);
-					$data = base64_decode($img);
-
-					$file = '.uploads/'.date('YmdHis').'.png';
-					$success = file_put_contents($file, $data);
-					print $success ? $file : 'Unable to save the file.';
-				}
-			}
-		}
-
-
-
 		$articleByStatus = $this->Article_Model->articleByStatus(1);
 
 		$submenuCount = $this->Menu_Model->subMenuCount();
@@ -2207,7 +2243,7 @@ class Front extends CI_Controller {
 			'articleAuthor' => 'Short URL Powered By Limit Code',
 			'articlePublisher' => 'Short URL Powered By Limit Code',
 			'ogType' => 'article',
-			'ogUrl' => base_url().index_with().'short',
+			'ogUrl' => base_url().index_with().'paste',
 			'ogTitle' => 'Screen Capture Share Powered By Limit Code',
 			'ogDescription' => 'Screen Capture Share Powered By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
 			'ogImage' => base_url().'/layout/img/lc-short-link.jpg',			
@@ -2233,6 +2269,140 @@ class Front extends CI_Controller {
 
 
 		$this->load->view('front/template/template',$data);
+	}
+
+	public function getScreenCapture()
+	{
+		if ($this->input->post()) {
+			if($this->input->post('action') == 'sendpaste') {
+				if(!empty($this->input->post('base64'))) {
+					$imageBase64 = $this->input->post('base64');
+
+					$removeBase = str_replace('data:image/png;base64,', '', $imageBase64);
+					$img = str_replace(' ', '+', $removeBase);
+					$data = base64_decode($img);
+
+					$scFolder = 'uploads/screencapture/'.date('Y').'/'.date('F').'/'; 
+					$scDir = path_with().$scFolder;
+					if (!is_dir($scDir))
+				    {
+				        mkdir($scDir, 0777, true);
+				    }
+
+				    $nameRand = date('YmdHis');
+
+				    $file = $scDir.$nameRand.'.png';
+					
+				    if(file_put_contents($file, $data)) {
+						$config['image_library'] = 'gd2';  
+						$config['source_image'] = $file;  
+						$config['create_thumb'] = TRUE;  
+						$config['maintain_ratio'] = TRUE;  
+						$config['width'] = 600;  
+
+						$this->load->library('image_lib', $config);  
+
+						if ($this->image_lib->resize()) {
+							if(unlink($file)) {
+								$newNameAfterResize = $scDir.$nameRand.'_thumb.png';
+
+								$longUrl = base_url().$scFolder.$nameRand.'_thumb.png';
+
+								$shortUrl = $this->generateShortURL($longUrl);
+
+								$message = array('status' => 1, 'linkto' => $shortUrl['shotrurl']);
+								echo json_encode($message);
+							}
+						} else {
+							echo $this->image_lib->display_errors();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public function showSecureScrenShootCapture()
+	{
+		if($this->uri->segment(1) == 'paste' && $this->uri->segment(2) != '' || !empty($this->uri->segment(2))) {
+
+			$code = $this->uri->segment(2);
+
+			$shortDataByCode = $this->User_Model->shortUrlByCode($code);
+			if(!empty($shortDataByCode)) {
+
+				$baseForSubs = strlen(base_url().'uploads/screencapture');
+
+				$getString = substr($shortDataByCode[0]->url_long, 34, 13);
+
+				//PARSING
+				if($getString != 'screencapture') {
+					$errorRedir = 'short';
+					redirect($errorRedir);
+				} else {
+
+					header('Content-type: image/jpeg');
+					echo file_get_contents($shortDataByCode[0]->url_long);
+					
+				}
+			}
+
+		} else {
+			redirect('home?showSecureScrenShootCapture');
+		}
+	}
+
+	public function showScrenShootCapture()
+	{
+		if($this->uri->segment(1) == 'paste' && $this->uri->segment(2) != '' || !empty($this->uri->segment(2))) {
+
+			$code = $this->uri->segment(2);
+
+			$shortDataByCode = $this->User_Model->shortUrlByCode($code);
+			if(!empty($shortDataByCode)) {
+
+				$baseForSubs = strlen(base_url().'uploads/screencapture');
+
+				$getString = substr($shortDataByCode[0]->url_long, 34, 13);
+
+				//PARSING
+				if($getString != 'screencapture') {
+					$errorRedir = 'short';
+					redirect($errorRedir);
+				} else {
+					$meta = array(
+						'author' => 'Screen Capture Share Powered By Limit Code Inc.',
+						'description' => 'Screen Capture Share By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+						'keywords' => 'Screen Capture Share Powered By Limit Code, screen capture, preint screen, paste, Limit Code, Limit, Code, Sebuah Media, Media, Berbagi, Tulisan, Artikel, Article, Writer, Share, Video, Photo, Image, Audio, mp4, mp3',
+						'articleAuthor' => 'Short URL Powered By Limit Code',
+						'articlePublisher' => 'Short URL Powered By Limit Code',
+						'ogType' => 'image',
+						'ogUrl' => base_url().index_with().'paste',
+						'ogTitle' => 'Screen Capture Share Powered By Limit Code',
+						'ogDescription' => 'Screen Capture Share Powered By Limit Code. Limit Code adalah sebuah media untuk berbagi tulisan, video, audio dan gambar.',
+						'ogImage' => base_url().index_with().'showsecurepaste/'.$code,			
+						'ogImageSecureUrl' => base_url().index_with().'showsecurepaste/'.$code,		
+						'ogImageAlt' => 'Screen Capture Share Powered By Limit Code'		
+					);
+
+					$data = array(
+						'webtitle' => 'Screen Capture Share Powered By Limit Code',
+						'meta'=> $meta,
+						'detailtitle' => 'Screen Capture Share Powered By Limit Code',
+
+						'contents' => base_url().index_with().'showsecurepaste/'.$code,
+
+						'sessionData' => $this->session->userdata()
+					);
+
+					$this->load->view('front/showpaste',$data);
+					
+				}
+			}
+
+		} else {
+			redirect('home?showScrenShootCapture');
+		}
 	}
 
 }

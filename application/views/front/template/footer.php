@@ -263,7 +263,8 @@ if(isset($sess['id_user'])) {
 <script type="text/javascript">
 
     jQuery(document).ready(function($){
-        $('#titlePaste').text('Click or tap here and paste or upload your');
+        $('#titlePastesAfter').hide();
+        $('#titlePastes').text('Click or tap here and paste or upload your');
     });
 
     document.addEventListener('paste', function (e) {
@@ -278,26 +279,50 @@ if(isset($sess['id_user'])) {
                         var source = URLObj.createObjectURL(blob);
 
                         var reader = new FileReader();
-
+ 
                         reader.onload = function (e) {
-
-                            $.ajax({
-                                url : "<?php echo base_url().index_with(); ?>paste",
-                                method : "POST",
-                                data : {action: 'paste',base64: e.target.result},
-                                async : false,
-                                dataType : 'json',
-                                success: function(data){
-                                    var imageUrl = 'google.com';
-                                    $('#titlePaste').text('Your Image Url is '+imageUrl+' already copy to your clipboard');
-                                }
-
-                            });                            
 
                             $('#pasteImage')
                             .show()
                             .attr('src', e.target.result);
 
+                            $.ajax({
+                                url : "<?php echo base_url().index_with(); ?>sendpaste",
+                                method : "POST",
+                                data : {action: 'sendpaste',base64: e.target.result},
+                                async : false,
+                                dataType : 'json',
+                                success: function(data){
+
+                                    if(data.status.toString() == '1') {
+                                        var imageUrl = data.linkto;
+
+                                        $('#titlePastes').hide();
+                                        $('#titlePastesAfter').show();
+
+                                        $('#valLink').val(imageUrl);
+                                        
+                                        var widthInput = document.getElementById("valLink");
+                                        var int = Number(6.9) || 7.7;
+                                        var lengText = ((imageUrl.length) * int);
+                                        document.getElementById("valLink").style.width = lengText+"px";
+
+                                        setTimeout(function(){ 
+
+                                            try {
+                                                $('#valLink').select();
+                                                var successful = document.execCommand('copy');
+                                                var msg = successful ? 'successful' : 'unsuccessful';
+                                                console.log('Copying text command was ' + msg);
+                                            } catch (err) {
+                                                console.log('Oops, unable to copy');
+                                            }
+
+                                        }, 1000);
+                                    }
+                                }
+
+                            });    
                         };
                         reader.readAsDataURL(blob);
                     }

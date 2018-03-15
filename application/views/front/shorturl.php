@@ -72,7 +72,7 @@
 							   }(document, 'script', 'facebook-jssdk'));
 
 							</script>
-							<h1><span class="world">Enter URL to short <div class="fb-share-button" data-href="<?php echo base_url().index_with(); ?>short" data-layout="button_count"></span></h1>
+							<h1><span class="world">Enter URL to short <div class="fb-share-button" data-href="<?php echo base_url().index_with(); ?>paste" data-layout="button_count"></span></h1>
 						</div>
 
 						<div class="row">

@@ -3,7 +3,7 @@
 <div id="myModal" class="modal fade in" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body"> 
                 <div class="text-center">
                     <h3 class="text-default"><?php if(isset($errors)) { echo $errors; } ?></h3>
                 </div>

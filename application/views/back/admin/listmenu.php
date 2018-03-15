@@ -26,56 +26,7 @@
 				</div>
 
 
-				<!-- Menu Modals -->
-				<div id="successModalAlert" role="dialog" class="modal fade">
-					<div class="modal-dialog modal-sm">
-						<div class="modal-content">
-							<div class="modal-header bg-success">
-								<h4 class="modal-title">Create new menu</h4>
-							</div>
-							<div class="modal-body">
-								<form action="menu/new" method="POST">
-									<div class="form-group">
-										<label class="control-label">New Menu Name</label>
-										<input autofocus="" class="form-control" type="text" name="menuname">
-									</div>
-									<button name="submit" class="btn btn-success btn-block btn-next" type="submit" value="menu">Create Menu</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Sub Menu Modals -->
-				<div id="successModalAlert2" role="dialog" class="modal fade">
-					<div class="modal-dialog modal-sm">
-						<div class="modal-content">
-							<div class="modal-header bg-info">
-								<h4 class="modal-title">Create new sub menu</h4>
-							</div>
-							<div class="modal-body">
-								<form action="menu/new" method="POST">
-									<div class="form-group">
-										<label class="control-label">Parent Menu</label>
-										<select class="form-control" name="menuname">
-											<?php if(isset($menus)): ?>
-												<?php foreach($menus as $menu): ?>
-													<option value="<?php echo $menu->id_menu; ?>"><?php echo $menu->menu_name; ?></option>
-												<?php endforeach; ?>
-											<?php endif; ?>
-										</select>
-									</div>
-									<div class="form-group">
-										<label class="control-label">New Sub Menu Name</label>
-										<input autofocus class="form-control" type="text" name="submenuname">
-									</div>
-									<button name="submit" class="btn btn-info btn-block btn-next" type="submit" value="submenu">Create Sub Menu</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				
 				<div class="row">
 					<div class="col-md-6">
 						<table class="table table-hover table-bordered table-striped">
@@ -196,4 +147,54 @@
 
 		<?php endforeach; ?>
 	<?php endif; ?>
+</div>
+
+<!-- Menu Modals -->
+<div id="successModalAlert" role="dialog" class="modal fade">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header bg-success">
+				<h4 class="modal-title">Create new menu</h4>
+			</div>
+			<div class="modal-body">
+				<form action="menu/new" method="POST">
+					<div class="form-group">
+						<label class="control-label">New Menu Name</label>
+						<input autofocus="" class="form-control" type="text" name="menuname">
+					</div>
+					<button name="submit" class="btn btn-success btn-block btn-next" type="submit" value="menu">Create Menu</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Sub Menu Modals -->
+<div id="successModalAlert2" role="dialog" class="modal fade">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header bg-info">
+				<h4 class="modal-title">Create new sub menu</h4>
+			</div>
+			<div class="modal-body">
+				<form action="menu/new" method="POST">
+					<div class="form-group">
+						<label class="control-label">Parent Menu</label>
+						<select class="form-control" name="menuname">
+							<?php if(isset($menus)): ?>
+								<?php foreach($menus as $menu): ?>
+									<option value="<?php echo $menu->id_menu; ?>"><?php echo $menu->menu_name; ?></option>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</select>
+					</div>
+					<div class="form-group">
+						<label class="control-label">New Sub Menu Name</label>
+						<input autofocus class="form-control" type="text" name="submenuname">
+					</div>
+					<button name="submit" class="btn btn-info btn-block btn-next" type="submit" value="submenu">Create Sub Menu</button>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>

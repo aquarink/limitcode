@@ -75,7 +75,7 @@ class Banner extends CI_Controller {
 
 						if($expType[1] == 'gif' || $expType[1] == 'jpg' || $expType[1] == 'png' || $expType[1] == 'jpeg') {
 							//config
-							$config['upload_path'] = './uploads/'.date('Y').'/'.date('F').'/ads/banner/';
+							$config['upload_path'] = './uploads/ads/banner/'.date('Y').'/'.date('F').'/';
 							$config['allowed_types'] = 'gif|jpg|png|jpeg';
 
 							$title = $this->input->post('titlebanner');
@@ -103,9 +103,9 @@ class Banner extends CI_Controller {
 
 							$path = getcwd();
 
-							if (!is_dir($path.'/uploads/'.date('Y').'/'.date('F').'/ads/banner'))
+							if (!is_dir($path.'/uploads/ads/banner/'.date('Y').'/'.date('F')))
 						    {
-						        mkdir($path.'/uploads/'.date('Y').'/'.date('F').'/ads/banner', 0777, true);
+						        mkdir($path.'/uploads/ads/banner/'.date('Y').'/'.date('F'), 0777, true);
 						    }
 
 						    $ad_path = 'uploads/'.date('Y').'/'.date('F').'/ads/banner/'.$newName;

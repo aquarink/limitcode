@@ -69,7 +69,7 @@ class Telegram extends CI_Controller {
 				$toWrite['chatTxt']		= $value['message']['text'];
 				$toWrite['chatDate']	= date('Y-m-d H:i:s', $value['message']['date']);
 
-				$telegramDir = path_with().'/uploads/'.date('Y').'/'.date('F').'/telegram/chats/';
+				$telegramDir = path_with().'/uploads/telegram/chats/'.date('Y').'/'.date('F').'/';
 				if (!is_dir($telegramDir))
 				{
 					mkdir($telegramDir, 0777, true);

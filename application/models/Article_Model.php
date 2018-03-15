@@ -690,7 +690,7 @@ class Article_Model extends CI_Model {
     }
 
 
-
+ 
     public function articleById($id_content) {
 
         $sql = "SELECT COUNT(w.id_watch) AS wtch, COUNT(cm.id_comment) AS cmnt, c.id_content AS id, c.title AS title, c.content_describ AS describ, m.id_menu AS idmenu, m.menu_name AS menu, 
@@ -710,6 +710,32 @@ class Article_Model extends CI_Model {
         LEFT JOIN menus_tb m ON m.id_menu = c.id_category 
 
         LEFT JOIN tags_tb t ON t.content_link = c.content_link WHERE c.id_content = " . $this->db->escape($id_content) . "";
+
+        $query = $this->db->query($sql);
+
+        return $query->result();
+
+    }
+
+    public function articles() {
+
+        $sql = "SELECT COUNT(w.id_watch) AS wtch, COUNT(cm.id_comment) AS cmnt, c.id_content AS id, c.title AS title, c.content_describ AS describ, m.id_menu AS idmenu, m.menu_name AS menu, 
+
+        c.kind AS kind, c.content_video AS video, c.content_thumbnail AS thumbnail, s.sub_name AS sub, u.name_user AS uname, c.content_status AS stat, 
+
+        c.content_datetime AS datearticle, s.id_sub AS idsub, u.id_user AS idUser, c.content_link AS link, u.email_user AS email
+
+        FROM content_tb c LEFT JOIN users_tb u ON u.id_user = c.id_user 
+
+        LEFT JOIN menu_sub_tb s ON s.id_sub = c.id_sub 
+
+        LEFT JOIN watch_content_tb w ON w.id_content = c.id_content 
+
+        LEFT JOIN comment_content_tb cm ON cm.id_content = c.id_content
+
+        LEFT JOIN menus_tb m ON m.id_menu = c.id_category 
+
+        LEFT JOIN tags_tb t ON t.content_link = c.content_link GROUP BY c.id_content,w.id_content";
 
         $query = $this->db->query($sql);
 
